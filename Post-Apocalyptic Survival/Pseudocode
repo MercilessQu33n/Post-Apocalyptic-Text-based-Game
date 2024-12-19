@@ -1,0 +1,142 @@
+Pseudocode for Code to “Move Between Rooms”
+
+INITIALIZE game
+
+SET the currentRoom to the "Office/Study"
+
+DEFINE the rooms with their connections:
+
+    The rooms defined are {
+        "Office/Study" can only go {"West" to "Kitchen"},
+        "Kitchen" can only go {"South" to "Basement" or "East" to "Office/Study"},
+        "Basement" can only go {"North" to "Kitchen" or “East” to “Utility Room” or “South” to “Garage” or “West” to “Living Room”},
+        "Utility Room" can only go {"North" to "Bedroom" or “West” to “Basement”},
+        "Bedroom" can only go {"South" to "Utility Room"},
+        "Garage" can only go {"North" to "Basement" or “East” to “Attic”}
+        "Attic" can only go {"West" to "Garage"},
+        "Living Room" can only go {"East" to "Basement"},
+    }
+
+FUNCTION Display the Room Description(rooms):
+    IF the room is the "Office/Study":
+        PRINT "You are in the Office/Study. It's cluttered with papers and books."
+    ELSE IF the room is the "Kitchen":
+        PRINT "You are in the Kitchen. The shelves are empty, and the fridge is broken."
+    ELSE IF the room is the "Basement":
+        PRINT "You are in the Basement. It's dark and filled with old boxes."
+    ELSE IF the room is the "Utility Room":
+        PRINT "You are in the Utility Room. Old cleaning supplies are scattered about."
+    ELSE IF the room is the "Bedroom":
+        PRINT "You are in the Bedroom. The bed is unmade, and clothes are scattered around."
+    ELSE IF the room is the "Garage":
+        PRINT "You are in the Garage. Tools and broken furniture are everywhere."
+    ELSE IF the room is the "Attic":
+        PRINT "You are in the Attic. The dusty old furniture is piled high."
+    ELSE IF the room is the "Living Room":
+        PRINT "You are in the Living Room. Shadows dance on the walls, and there's an ominous feeling in the air."
+
+FUNCTION the getPlayerInput():
+    PRINT "Which direction would you like to go? (North, South, East, West)"
+    READ INPUT from the player as direction
+    RETURN direction
+
+FUNCTION the statement if the Direction is Valid(the direction, currentRoom player is in):
+    IF direction exists in rooms[within the currentRoom player is in]:
+        RETURN it as True
+    ELSE:
+        RETURN it as False
+
+WHILE the game is active:
+    Display the Room Description(to the currentRoom player is in)
+    direction will equal to the getPlayerInput()
+
+    VALIDATE the player's input
+    IF the Direction is Valid(the direction, currentRoom player is in):
+        MOVE the player to the next room
+        currentRoom the player is in will equal the rooms[currentRoom][the direction]
+        PRINT "You move " + direction + "."
+    ELSE:
+        PRINT "Invalid direction! You can't go that way. Please choose another direction."
+
+END GAME
+
+
+
+Pseudocode for Code to “Get an Item”
+
+INITIALIZE inventory and current room items
+SET inventory to [empty]
+SET the currentRoomItems to [empty] # This will change based on the player's location
+SET the requiredItems to ["radio", "gas mask", "bolt cutters", "canned food", "flashlight", "handgun"] # List of items needed to escape
+
+# Function to set items in the current room
+FUNCTION to setCurrentRoomItems(room)
+    IF the room is EQUAL to the "Attic" THEN
+        The currentRoomItems will have the ["Radio"]
+    ELSE IF the room is EQUAL to the "Basement" THEN
+        The currentRoomItems will have the ["Gas Mask"]
+    ELSE IF the room is EQUAL to the "Garage" THEN
+        The currentRoomItems will have the ["Bolt Cutters"]
+    ELSE IF the room is EQUAL to the "Kitchen" THEN
+        The currentRoomItems will have the ["Canned Food"]
+    ELSE IF the room is EQUAL to the "Utility Room" THEN
+        The currentRoomItems will have the ["Flashlight"]
+    ELSE IF the room is EQUAL to the "Bedroom" THEN
+        The currentRoomItems will have the ["Handgun"]
+    ELSE
+        The currentRoomItems will have [empty]
+    END IF
+END FUNCTION
+
+# Function to get items from the current room
+FUNCTION the getItemFromRoom()
+    # Display current items in the room
+    PRINT "Items in the room: " INPUT the currentRoomItems
+
+    # Prompt the player for input
+    PRINT "Enter the name of the item you want to pick up:"
+    The playerInput will EQUAL to GET the user input
+
+    # Validate player input
+    WHILE TRUE
+        IF the playerInput is IN the currentRoomItems THEN
+            # If the input is valid, add the item to the inventory
+            ADD the playerInput to inventory
+            # Remove the item from the current room items
+            REMOVE the playerInput from currentRoomItems
+            # Display success message
+            PRINT the playerInput + " has been added to your inventory."
+            BREAK # Exit the loop after successful addition
+        ELSE
+            # If the input is invalid, prompt for input again
+            PRINT "Invalid item. Please enter a valid item from the room:"
+            The playerInput will EQUAL to GET the user input
+        END IF
+    END WHILE
+END FUNCTION
+
+# Function to check if all required items are collected
+FUNCTION to check if All Items are Collected()
+    FOR an item IN the requiredItems list DO
+        IF the item is NOT IN inventory THEN
+            RETURN FALSE # If any required item is missing, return FALSE
+        END IF
+    END FOR
+    RETURN TRUE # All required items are collected
+END FUNCTION
+
+# Main game loop
+WHILE the game is running
+    # Call function to set current room items based on the player's current location
+    The currentRoom will EQUAL to GET the current room location
+    Set Current Room Items to currentRoom
+
+    # Call function to get items from the room
+    SET getItemFromRoom()
+
+    # Check if all items are collected after getting an item
+    IF the check All Items are Collected() THEN
+        PRINT "Congratulations! You have collected all the items!"
+        PRINT "You can now confront The Ravager at any time."
+    END IF
+END WHILE
